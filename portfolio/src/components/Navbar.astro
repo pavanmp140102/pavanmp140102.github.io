@@ -1,0 +1,39 @@
+---
+import IconLogo from './IconLogo.astro';
+
+const links = [
+  { label: 'About', href: '#about' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Work', href: '#work' },
+  { label: 'Contact', href: '#contact' },
+];
+
+const resumeUrl = 'https://drive.google.com';
+---
+
+<header class="sticky top-0 z-50 border-b border-lightest-navy/70 bg-navy/80 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+    <a href="#hero" class="flex items-center gap-3 text-accent hover:-translate-y-0.5">
+      <IconLogo />
+      <span class="font-mono text-sm text-white">Pavan Patil</span>
+    </a>
+
+    <ul class="flex flex-wrap items-center gap-4 font-mono text-sm md:gap-6">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} class="text-lightest-slate hover:text-accent">{link.label}</a>
+        </li>
+      ))}
+      <li>
+        <a
+          href={resumeUrl}
+          target="_blank"
+          rel="noreferrer"
+          class="rounded border border-accent px-4 py-2 text-accent hover:-translate-y-1 hover:bg-accent/10"
+        >
+          Resume
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

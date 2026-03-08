@@ -1,0 +1,10 @@
+---
+const { index = '01', title } = Astro.props;
+---
+
+<div class="mb-8 flex items-center gap-4">
+  <h2 class="font-mono text-2xl font-semibold text-lightest-slate md:text-3xl">
+    <span class="mr-2 text-accent">{index}.</span>{title}
+  </h2>
+  <div class="h-px flex-1 bg-lightest-navy"></div>
+</div>
