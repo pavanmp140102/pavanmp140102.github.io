@@ -1,0 +1,35 @@
+---
+import SectionTitle from '../components/SectionTitle.astro';
+
+const experiences = [
+  {
+    role: 'Robotics Engineer',
+    company: 'Autonomy Lab',
+    duration: '2024 – Present',
+    description:
+      'Working on autonomous robotics systems using ROS2 and LiDAR perception for navigation, obstacle detection, and mission planning.',
+  },
+  {
+    role: 'Robotics Software Engineer',
+    company: 'Field Robotics Team',
+    duration: '2022 – 2024',
+    description:
+      'Developed modular perception and controls pipelines in C++/Python, improving localization stability and deployment reliability.',
+  },
+];
+---
+
+<section id="experience" class="mx-auto max-w-5xl px-6 py-24">
+  <SectionTitle index="02" title="Experience" />
+  <div class="space-y-6 border-l border-lightest-navy pl-6">
+    {experiences.map((item) => (
+      <article class="group rounded bg-light-navy p-5 shadow-glow transition hover:-translate-y-1">
+        <h3 class="text-xl font-semibold text-lightest-slate">
+          {item.role} <span class="text-accent">@ {item.company}</span>
+        </h3>
+        <p class="mt-1 font-mono text-sm text-slate">{item.duration}</p>
+        <p class="mt-3 text-light-slate">{item.description}</p>
+      </article>
+    ))}
+  </div>
+</section>

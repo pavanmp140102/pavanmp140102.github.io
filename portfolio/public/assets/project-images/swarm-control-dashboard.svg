@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Swarm Control Dashboard">
+  <rect width="800" height="450" fill="#112240"/>
+  <rect x="90" y="70" width="620" height="310" rx="20" fill="#233554"/>
+  <circle cx="220" cy="180" r="18" fill="#64ffda"/>
+  <circle cx="320" cy="260" r="18" fill="#64ffda"/>
+  <circle cx="420" cy="170" r="18" fill="#64ffda"/>
+  <circle cx="520" cy="250" r="18" fill="#64ffda"/>
+  <path d="M220 180L320 260L420 170L520 250" stroke="#64ffda" stroke-width="4"/>
+  <text x="50%" y="84%" text-anchor="middle" fill="#e6f1ff" font-size="34" font-family="monospace">Swarm Control Dashboard</text>
+</svg>

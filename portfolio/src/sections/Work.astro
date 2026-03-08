@@ -1,0 +1,46 @@
+---
+import SectionTitle from '../components/SectionTitle.astro';
+
+const projects = [
+  {
+    title: 'Autonomous Rescue Robot',
+    description: 'Multi-sensor rescue platform with real-time mapping, victim detection, and adaptive mission planning.',
+    tech: 'ROS2 | C++ | Python | LiDAR',
+    github: 'https://github.com/',
+    image: '/assets/project-images/autonomous-rescue-robot.svg',
+  },
+  {
+    title: 'Robot Perception Stack',
+    description: 'Camera and LiDAR perception stack for object tracking, terrain classification, and robust obstacle avoidance.',
+    tech: 'ROS2 | OpenCV | SLAM',
+    github: 'https://github.com/',
+    image: '/assets/project-images/robot-perception-stack.svg',
+  },
+  {
+    title: 'Swarm Control Dashboard',
+    description: 'Web-based operator dashboard for monitoring and controlling a fleet of collaborative mobile robots.',
+    tech: 'Python | Embedded Systems | WebSockets',
+    github: 'https://github.com/',
+    image: '/assets/project-images/swarm-control-dashboard.svg',
+  },
+];
+---
+
+<section id="work" class="mx-auto max-w-6xl px-6 py-24">
+  <SectionTitle index="03" title="Work" />
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    {projects.map((project) => (
+      <article class="group overflow-hidden rounded bg-light-navy shadow-glow transition hover:-translate-y-2 hover:shadow-xl">
+        <img src={project.image} alt={project.title} class="h-44 w-full object-cover opacity-85 transition group-hover:opacity-100" />
+        <div class="space-y-3 p-5">
+          <h3 class="text-xl font-semibold text-lightest-slate">{project.title}</h3>
+          <p class="text-light-slate">{project.description}</p>
+          <p class="font-mono text-sm text-slate">{project.tech}</p>
+          <a href={project.github} target="_blank" rel="noreferrer" class="font-mono text-sm text-accent hover:underline">
+            GitHub →
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
