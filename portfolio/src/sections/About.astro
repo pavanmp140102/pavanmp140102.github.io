@@ -1,0 +1,28 @@
+---
+import SectionTitle from '../components/SectionTitle.astro';
+
+const skills = ['ROS2', 'C++', 'Python', 'LiDAR', 'SLAM', 'Embedded Systems', 'Computer Vision'];
+---
+
+<section id="about" class="mx-auto max-w-5xl px-6 py-24">
+  <SectionTitle index="01" title="About" />
+  <div class="grid gap-10 md:grid-cols-[2fr_1fr] md:items-start">
+    <div class="space-y-4 text-light-slate">
+      <p>
+        I’m a robotics engineer focused on designing autonomous systems that can perceive, plan,
+        and act in uncertain environments.
+      </p>
+      <p>
+        My work combines robust software architecture with practical field testing, from sensor
+        fusion and SLAM pipelines to embedded control loops and deployment-ready tooling.
+      </p>
+      <p>Technologies I work with most often:</p>
+      <ul class="grid grid-cols-2 gap-y-2 font-mono text-sm text-lightest-slate sm:grid-cols-3">
+        {skills.map((skill) => <li class="before:mr-2 before:text-accent before:content-['▹']">{skill}</li>)}
+      </ul>
+    </div>
+    <div class="mx-auto w-full max-w-56 rounded bg-light-navy p-2 shadow-glow">
+      <img src="/assets/profile.svg" alt="Pavan Patil profile illustration" class="rounded object-cover" />
+    </div>
+  </div>
+</section>
