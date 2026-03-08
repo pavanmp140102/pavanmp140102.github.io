@@ -1,6 +1,4 @@
 ---
-import IconLogo from './IconLogo.astro';
-
 const links = [
   { label: 'About', href: '#about' },
   { label: 'Experience', href: '#experience' },
@@ -13,9 +11,9 @@ const resumeUrl = 'https://drive.google.com';
 
 <header class="sticky top-0 z-50 border-b border-lightest-navy/70 bg-navy/80 backdrop-blur">
   <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-    <a href="#hero" class="flex items-center gap-3 text-accent hover:-translate-y-0.5">
-      <IconLogo />
-      <span class="font-mono text-sm text-white">Pavan Patil</span>
+    <a href="#hero" class="flex items-center gap-3 text-white hover:text-accent">
+      <img src="/assets/logo.svg" alt="Pavan Patil logo" class="h-8 w-8 rounded-sm object-cover" />
+      <span class="font-mono text-sm">Pavan Patil</span>
     </a>
 
     <ul class="flex flex-wrap items-center gap-4 font-mono text-sm md:gap-6">

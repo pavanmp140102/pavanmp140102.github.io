@@ -15,8 +15,8 @@ npm run build
 
 ## Notes
 
-- Reused the same icon style from the existing repository (logo + social icons) inside Astro components.
 - The default resume button points to `https://drive.google.com` as a placeholder. Update `resumeUrl` in `src/components/Navbar.astro`.
+- Project and profile visuals are SVG assets (text-based) under `public/assets/` to keep PRs lightweight and avoid binary artifact issues.
 
 ## Deploy
 
