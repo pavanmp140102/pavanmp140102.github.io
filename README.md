@@ -1,0 +1,23 @@
+# Pavan Patil Robotics Portfolio (Astro + Tailwind)
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## Notes
+
+- The default resume button points to `https://drive.google.com` as a placeholder. Update `resumeUrl` in `src/components/Navbar.astro`.
+- Project and profile visuals are SVG assets (text-based) under `public/assets/` to keep PRs lightweight and avoid binary artifact issues.
+
+## Deploy
+
+A GitHub Actions workflow is included at `.github/workflows/deploy-portfolio.yml` to deploy the `portfolio/dist` output to GitHub Pages.
