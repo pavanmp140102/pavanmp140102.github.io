@@ -1,0 +1,33 @@
+{
+  "$ref": "#/definitions/experiences",
+  "definitions": {
+    "experiences": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "company",
+        "duration",
+        "description"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

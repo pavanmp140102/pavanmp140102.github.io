@@ -1,0 +1,152 @@
+---
+import { getCollection } from 'astro:content';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const blogs = await getCollection('blogs');
+  return blogs.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{post.data.title} | Pavan Patil</title>
+    <meta name="description" content={post.data.description} />
+  </head>
+  <body>
+    <Navbar />
+    <main class="mx-auto max-w-3xl px-6 py-24">
+      <article class="prose prose-invert max-w-none">
+        <div class="mb-8">
+          <a href="/blog" class="font-mono text-sm text-accent hover:underline">
+            ← Back to blog
+          </a>
+          <h1 class="mt-4 text-4xl font-bold text-lightest-slate">{post.data.title}</h1>
+          <p class="mt-2 font-mono text-sm text-slate">
+            {new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+          <p class="mt-3 text-light-slate">{post.data.description}</p>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-2">
+              {post.data.tags.map((tag: string) => (
+                <span class="inline-block rounded bg-light-navy px-3 py-1 font-mono text-xs text-accent">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        <div class="my-12 border-t border-lightest-navy"></div>
+        <div class="prose-content text-light-slate">
+          <Content />
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .prose-content {
+    --tw-prose-body: rgb(169, 184, 210);
+    --tw-prose-headings: rgb(230, 237, 243);
+    --tw-prose-lead: rgb(169, 184, 210);
+    --tw-prose-links: rgb(100, 200, 255);
+    --tw-prose-bold: rgb(230, 237, 243);
+    --tw-prose-counters: rgb(100, 200, 255);
+    --tw-prose-bullets: rgb(100, 200, 255);
+    --tw-prose-hr: rgb(76, 86, 106);
+    --tw-prose-quotes: rgb(169, 184, 210);
+    --tw-prose-quote-borders: rgb(100, 200, 255);
+    --tw-prose-captions: rgb(169, 184, 210);
+    --tw-prose-code: rgb(230, 237, 243);
+    --tw-prose-pre-bg: rgb(46, 52, 64);
+    --tw-prose-pre-code: rgb(236, 239, 244);
+    --tw-prose-th-borders: rgb(169, 184, 210);
+    --tw-prose-td-borders: rgb(76, 86, 106);
+  }
+
+  .prose-content h2 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: rgb(230, 237, 243);
+  }
+
+  .prose-content h3 {
+    margin-top: 1.25em;
+    margin-bottom: 0.5em;
+    font-size: 1.25em;
+    font-weight: 600;
+    color: rgb(230, 237, 243);
+  }
+
+  .prose-content p {
+    margin-bottom: 1em;
+    line-height: 1.75;
+  }
+
+  .prose-content ul,
+  .prose-content ol {
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+  }
+
+  .prose-content li {
+    margin-bottom: 0.5em;
+  }
+
+  .prose-content code {
+    background-color: rgb(46, 52, 64);
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+    font-family: 'Courier New', monospace;
+    color: rgb(100, 200, 255);
+  }
+
+  .prose-content pre {
+    background-color: rgb(46, 52, 64);
+    padding: 1em;
+    border-radius: 0.5em;
+    overflow-x: auto;
+    margin-bottom: 1.25em;
+  }
+
+  .prose-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: rgb(236, 239, 244);
+  }
+
+  .prose-content a {
+    color: rgb(100, 200, 255);
+    text-decoration: underline;
+  }
+
+  .prose-content a:hover {
+    color: rgb(255, 200, 124);
+  }
+
+  .prose-content blockquote {
+    border-left: 4px solid rgb(100, 200, 255);
+    padding-left: 1em;
+    margin: 1.25em 0;
+    color: rgb(169, 184, 210);
+    font-style: italic;
+  }
+</style>

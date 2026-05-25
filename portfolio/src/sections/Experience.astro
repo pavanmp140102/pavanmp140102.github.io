@@ -1,22 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
 
-const experiences = [
-  {
-    role: 'Physical Internship',
-    company: 'KLE Technological University and C.A.S.E',
-    duration: 'Jan 2024 – July 2024',
-    description:
-      'Engaged in hands-on exploration and implementation of algorithms aimed at enabling robots to autonomously navigate through complex surroundings, addressing challenges such as obstacle avoidance and efficient path optimization.',
-  },
-  {
-    role: 'Virtual Internship',
-    company: 'AICTE and Mathworks',
-    duration: 'May 2023 – Sep 2023',
-    description:
-      'Developed proficiency in machine learning algorithms, deep learning techniques, and neural network architectures using industry-standard tools like MATLAB and Simulink provided by Mathworks.',
-  },
-];
+const experiences = await getCollection('experiences');
 ---
 
 <section id="experience" class="mx-auto max-w-5xl px-6 py-24">
@@ -25,10 +11,10 @@ const experiences = [
     {experiences.map((item) => (
       <article class="group rounded bg-light-navy p-5 shadow-glow transition hover:-translate-y-1">
         <h3 class="text-xl font-semibold text-lightest-slate">
-          {item.role} <span class="text-accent">@ {item.company}</span>
+          {item.data.role} <span class="text-accent">@ {item.data.company}</span>
         </h3>
-        <p class="mt-1 font-mono text-sm text-slate">{item.duration}</p>
-        <p class="mt-3 text-light-slate">{item.description}</p>
+        <p class="mt-1 font-mono text-sm text-slate">{item.data.duration}</p>
+        <p class="mt-3 text-light-slate">{item.data.description}</p>
       </article>
     ))}
   </div>
