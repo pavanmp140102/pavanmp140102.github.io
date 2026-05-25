@@ -11,30 +11,120 @@ const resumeUrl = 'https://drive.google.com/file/d/1OPF5zC-sCm9-UFFYBOq7DJSf-xrY
 ---
 
 <header class="sticky top-0 z-50 border-b border-lightest-navy/70 bg-navy/80 backdrop-blur">
-  <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+  <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
     <a href="/" class="flex items-center gap-3 text-white hover:text-accent">
       <img src="/assets/logo.png" alt="Pavan Patil logo" class="h-8 w-8 rounded-sm object-cover" />
       <span class="font-mono text-sm">Pavan Patil</span>
     </a>
 
-    <ul class="flex flex-wrap items-center gap-4 font-mono text-sm md:gap-6">
+    {/* Hamburger Menu Button (Mobile Only) */}
+    <button id="menu-toggle" class="flex md:hidden flex-col gap-1.5 relative z-40" aria-label="Toggle menu">
+      <span id="line1" class="h-1 w-6 bg-accent transition-all duration-300 origin-center"></span>
+      <span id="line2" class="h-1 w-6 bg-accent transition-all duration-300"></span>
+      <span id="line3" class="h-1 w-6 bg-accent transition-all duration-300 origin-center"></span>
+    </button>
+
+    {/* Navigation Links */}
+    <ul id="nav-menu" class="hidden md:flex absolute md:static top-full left-0 right-0 md:right-auto bg-navy/95 md:bg-transparent flex-col md:flex-row w-full md:w-auto gap-4 font-mono text-sm md:gap-6 p-6 md:p-0 border-b md:border-b-0 border-lightest-navy/70 transition-all duration-300 origin-top">
       {links.map((link) => (
         <li>
-          <a href={link.href} class="text-lightest-slate hover:text-accent">
+          <a href={link.href} class="text-lightest-slate hover:text-accent block">
             <span class="text-accent">{link.number}.</span> {link.label}
           </a>
         </li>
       ))}
-      <li>
+      <li class="md:hidden">
         <a
           href={resumeUrl}
           target="_blank"
           rel="noreferrer"
-          class="rounded border border-accent px-4 py-2 text-accent hover:-translate-y-1 hover:bg-accent/10"
+          class="block rounded border border-accent px-4 py-2 text-accent hover:bg-accent/10"
         >
           Resume
         </a>
       </li>
     </ul>
+
+    {/* Resume Button (Desktop Only) */}
+    <a
+      href={resumeUrl}
+      target="_blank"
+      rel="noreferrer"
+      class="hidden md:block rounded border border-accent px-4 py-2 text-accent hover:-translate-y-1 hover:bg-accent/10"
+    >
+      Resume
+    </a>
   </nav>
 </header>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  const navLinks = navMenu?.querySelectorAll('a');
+  const line1 = document.getElementById('line1');
+  const line2 = document.getElementById('line2');
+  const line3 = document.getElementById('line3');
+
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener('click', () => {
+      const isHidden = navMenu.classList.contains('hidden');
+      
+      if (isHidden) {
+        // Opening menu
+        navMenu.classList.remove('hidden');
+        navMenu.style.animation = 'slideDown 0.3s ease-out forwards';
+        
+        // Hamburger animation to X
+        line1.style.transform = 'rotate(45deg) translateY(10px)';
+        line2.style.opacity = '0';
+        line3.style.transform = 'rotate(-45deg) translateY(-10px)';
+      } else {
+        // Closing menu
+        navMenu.style.animation = 'slideUp 0.3s ease-out forwards';
+        setTimeout(() => navMenu.classList.add('hidden'), 300);
+        
+        // Reset hamburger
+        line1.style.transform = 'rotate(0)';
+        line2.style.opacity = '1';
+        line3.style.transform = 'rotate(0)';
+      }
+    });
+
+    // Close menu when a link is clicked
+    navLinks?.forEach((link) => {
+      link.addEventListener('click', () => {
+        navMenu.classList.add('hidden');
+        navMenu.style.animation = 'slideUp 0.3s ease-out forwards';
+        
+        // Reset hamburger
+        line1.style.transform = 'rotate(0)';
+        line2.style.opacity = '1';
+        line3.style.transform = 'rotate(0)';
+      });
+    });
+  }
+</script>
+
+<style>
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+</style>
