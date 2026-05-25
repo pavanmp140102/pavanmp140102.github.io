@@ -13,6 +13,9 @@
         "duration": {
           "type": "string"
         },
+        "startDate": {
+          "type": "string"
+        },
         "description": {
           "type": "string"
         },
@@ -24,6 +27,7 @@
         "role",
         "company",
         "duration",
+        "startDate",
         "description"
       ],
       "additionalProperties": false

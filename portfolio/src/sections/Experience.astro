@@ -2,7 +2,9 @@
 import { getCollection } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
 
-const experiences = await getCollection('experiences');
+const experiences = (await getCollection('experiences')).sort(
+  (a, b) => new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime()
+);
 ---
 
 <section id="experience" class="mx-auto max-w-5xl px-6 py-24">

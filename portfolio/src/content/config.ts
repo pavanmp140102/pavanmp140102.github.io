@@ -6,6 +6,7 @@ const experienceCollection = defineCollection({
     role: z.string(),
     company: z.string(),
     duration: z.string(),
+    startDate: z.string(),
     description: z.string(),
   }),
 });
