@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import '../../styles/global.css';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+const blogs = (await getCollection('blogs')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog - Pavan MP</title>
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
+  </head>
+  <body class="bg-slate-900 text-slate-100">
+    <Navbar />
+    
+    <main class="min-h-screen px-6 py-20 md:px-12 lg:px-20 max-w-7xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2 text-slate-100">Blog</h1>
+      <p class="text-slate-400 mb-12">Thoughts, tutorials, and projects</p>
+
+      {blogs.length === 0 ? (
+        <p class="text-slate-400 text-lg">No blog posts yet. Check back soon!</p>
+      ) : (
+        <div class="space-y-6">
+          {blogs.map((post) => (
+            <article class="border-l-4 border-cyan-400 pl-6 py-4 hover:bg-slate-800/50 transition-colors">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+                <h2 class="text-2xl font-semibold text-slate-100">
+                  <a href={`/blog/${post.slug}`} class="hover:text-cyan-400 transition-colors">
+                    {post.data.title}
+                  </a>
+                </h2>
+                <time class="text-slate-400 text-sm">
+                  {new Date(post.data.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+              <p class="text-slate-300 mb-3">{post.data.description}</p>
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {post.data.tags.map((tag) => (
+                    <span class="text-xs bg-slate-700 text-cyan-300 px-3 py-1 rounded-full">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+    </main>
+
+    <Footer />
+  </body>
+</html>
