@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Robot Perception Stack">
+  <rect width="800" height="450" fill="#112240"/>
+  <circle cx="260" cy="220" r="120" fill="#233554"/>
+  <circle cx="260" cy="220" r="70" fill="none" stroke="#64ffda" stroke-width="10"/>
+  <rect x="430" y="120" width="220" height="200" rx="16" fill="#233554"/>
+  <path d="M460 280h160M460 250h120M460 220h140" stroke="#64ffda" stroke-width="8" stroke-linecap="round"/>
+  <text x="50%" y="84%" text-anchor="middle" fill="#e6f1ff" font-size="36" font-family="monospace">Robot Perception Stack</text>
+</svg>
