@@ -83,7 +83,7 @@ const others    = allProjects.filter((p) => !p.data.featured);
   {others.length > 0 && (
     <div>
       <h3 class="mb-2 text-center text-2xl font-bold text-lightest-slate">Other Noteworthy Projects</h3>
-      <p class="mb-10 text-center font-mono text-sm text-accent">view the archive</p>
+      <p class="mb-10 text-center font-mono text-sm"><a href="https://github.com/pavanmp140102?tab=repositories" target="_blank" rel="noreferrer" class="text-accent hover:underline">view the archive</a></p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {others.map((project) => (
           <article class="group flex flex-col rounded bg-light-navy p-7 shadow-glow transition duration-300 hover:-translate-y-2 hover:shadow-xl">

@@ -56,22 +56,22 @@ const readingTime = getReadingTime(post.body);
 
 <style is:global>
   .prose-content {
-    --tw-prose-body: rgb(169, 184, 210);
-    --tw-prose-headings: rgb(230, 237, 243);
-    --tw-prose-lead: rgb(169, 184, 210);
-    --tw-prose-links: rgb(100, 200, 255);
-    --tw-prose-bold: rgb(230, 237, 243);
-    --tw-prose-counters: rgb(100, 200, 255);
-    --tw-prose-bullets: rgb(100, 200, 255);
-    --tw-prose-hr: rgb(76, 86, 106);
-    --tw-prose-quotes: rgb(169, 184, 210);
-    --tw-prose-quote-borders: rgb(100, 200, 255);
-    --tw-prose-captions: rgb(169, 184, 210);
-    --tw-prose-code: rgb(230, 237, 243);
-    --tw-prose-pre-bg: rgb(46, 52, 64);
-    --tw-prose-pre-code: rgb(236, 239, 244);
-    --tw-prose-th-borders: rgb(169, 184, 210);
-    --tw-prose-td-borders: rgb(76, 86, 106);
+    --tw-prose-body: theme('colors.light-slate');
+    --tw-prose-headings: theme('colors.lightest-slate');
+    --tw-prose-lead: theme('colors.light-slate');
+    --tw-prose-links: theme('colors.accent');
+    --tw-prose-bold: theme('colors.lightest-slate');
+    --tw-prose-counters: theme('colors.accent');
+    --tw-prose-bullets: theme('colors.accent');
+    --tw-prose-hr: theme('colors.lightest-navy');
+    --tw-prose-quotes: theme('colors.light-slate');
+    --tw-prose-quote-borders: theme('colors.accent');
+    --tw-prose-captions: theme('colors.light-slate');
+    --tw-prose-code: theme('colors.lightest-slate');
+    --tw-prose-pre-bg: theme('colors.light-navy');
+    --tw-prose-pre-code: theme('colors.lightest-slate');
+    --tw-prose-th-borders: theme('colors.light-slate');
+    --tw-prose-td-borders: theme('colors.lightest-navy');
   }
 
   .prose-content h2 {
@@ -79,7 +79,7 @@ const readingTime = getReadingTime(post.body);
     margin-bottom: 0.5em;
     font-size: 1.5em;
     font-weight: 600;
-    color: rgb(230, 237, 243);
+    color: theme('colors.lightest-slate');
   }
 
   .prose-content h3 {
@@ -87,7 +87,7 @@ const readingTime = getReadingTime(post.body);
     margin-bottom: 0.5em;
     font-size: 1.25em;
     font-weight: 600;
-    color: rgb(230, 237, 243);
+    color: theme('colors.lightest-slate');
   }
 
   .prose-content p {
@@ -106,15 +106,15 @@ const readingTime = getReadingTime(post.body);
   }
 
   .prose-content code {
-    background-color: rgb(46, 52, 64);
+    background-color: theme('colors.light-navy');
     padding: 0.25em 0.5em;
     border-radius: 0.25em;
-    font-family: 'Courier New', monospace;
-    color: rgb(100, 200, 255);
+    font-family: theme('fontFamily.mono');
+    color: theme('colors.accent');
   }
 
   .prose-content pre {
-    background-color: rgb(46, 52, 64);
+    background-color: theme('colors.light-navy');
     padding: 1em;
     border-radius: 0.5em;
     overflow-x: auto;
@@ -124,23 +124,23 @@ const readingTime = getReadingTime(post.body);
   .prose-content pre code {
     background-color: transparent;
     padding: 0;
-    color: rgb(236, 239, 244);
+    color: theme('colors.lightest-slate');
   }
 
   .prose-content a {
-    color: rgb(100, 200, 255);
+    color: theme('colors.accent');
     text-decoration: underline;
   }
 
   .prose-content a:hover {
-    color: rgb(255, 200, 124);
+    color: theme('colors.white');
   }
 
   .prose-content blockquote {
-    border-left: 4px solid rgb(100, 200, 255);
+    border-left: 4px solid theme('colors.accent');
     padding-left: 1em;
     margin: 1.25em 0;
-    color: rgb(169, 184, 210);
+    color: theme('colors.light-slate');
     font-style: italic;
   }
 </style>
