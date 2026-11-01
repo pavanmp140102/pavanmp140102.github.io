@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page Not Found | Pavan Patil" description="The page you're looking for doesn't exist." noindex>
+  <main id="main" class="mx-auto flex min-h-[70vh] max-w-2xl flex-col items-center justify-center px-6 text-center">
+    <p class="font-mono text-6xl font-semibold text-accent md:text-8xl">404</p>
+    <h1 class="mt-4 text-3xl font-bold text-lightest-slate md:text-4xl">Page Not Found</h1>
+    <p class="mt-4 text-light-slate">The page you're looking for doesn't exist or has moved.</p>
+    <a
+      href="/"
+      class="mt-10 inline-block rounded border border-accent px-8 py-4 font-mono text-sm text-accent hover:-translate-y-1 hover:bg-accent/10"
+    >
+      Go Home
+    </a>
+  </main>
+</Layout>

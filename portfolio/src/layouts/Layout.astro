@@ -9,9 +9,10 @@ interface Props {
   title: string;
   description: string;
   ogType?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { title, description, ogType = 'website' } = Astro.props;
+const { title, description, ogType = 'website', noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -22,7 +23,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/png" href="/assets/logo.png" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

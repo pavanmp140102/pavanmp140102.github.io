@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pavanmp140102.github.io/sitemap-index.xml
