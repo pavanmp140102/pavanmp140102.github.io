@@ -1,6 +1,6 @@
 # Pavan Patil — Robotics Portfolio
 
-Personal portfolio site for Pavan Patil, a robotics engineer specialising in autonomous systems and the automotive domain. Built with Astro and Tailwind CSS, deployed to GitHub Pages.
+Personal portfolio site for Pavan Patil, a robotics engineer specializing in autonomous systems and the automotive domain. Built with Astro and Tailwind CSS, deployed to GitHub Pages.
 
 Inspired by [Brittany Chiang's portfolio](https://github.com/bchiang7/v4) — recreated from scratch using Astro.
 
