@@ -17,11 +17,11 @@ const projectCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     tech: z.string(),
-    github: z.string(),
+    github: z.string().url(),
     image: z.string(),
     featured: z.boolean().optional().default(false),
     order: z.number().optional().default(100),
-    liveUrl: z.string().optional(),
+    liveUrl: z.string().url().optional(),
   }),
 });
 
