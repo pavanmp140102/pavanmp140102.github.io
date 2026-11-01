@@ -5,5 +5,5 @@ tech: "MATLAB / Simulink | ROS | GPS RTK | LiDAR | PID | SolidWorks | Ansys"
 github: "https://github.com/pavanmp140102/Sponsored-Research-Project"
 image: "/assets/project-images/autonomous-nav-robot.webp"
 featured: true
-order: 1
+order: 2
 ---
