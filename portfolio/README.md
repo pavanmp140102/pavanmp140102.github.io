@@ -5,7 +5,7 @@ A modern, maintainable portfolio built with **Astro** and **Tailwind CSS**, feat
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 20+ and npm (CI builds with Node 24)
+- Node.js 22.23.4+ and npm (CI builds with Node 24, see `.nvmrc`)
 
 ### Installation & Development
 

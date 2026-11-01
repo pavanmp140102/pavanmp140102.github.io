@@ -115,6 +115,12 @@ const readingTime = getReadingTime(post.body);
     color: theme('colors.accent');
   }
 
+  /* The typography plugin wraps inline code in literal backticks; the pill background is enough */
+  .prose-content code::before,
+  .prose-content code::after {
+    content: none;
+  }
+
   .prose-content pre {
     background-color: theme('colors.light-navy');
     padding: 1em;
