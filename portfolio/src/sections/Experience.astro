@@ -31,6 +31,8 @@ const tabLabel = (name: string) => {
   if (name.includes('AICTE'))                             return 'AICTE';
   return name;
 };
+
+const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
 <section id="experience" class="mx-auto max-w-5xl px-6 py-24">
@@ -39,14 +41,19 @@ const tabLabel = (name: string) => {
   <div class="flex flex-col md:flex-row">
 
     {/* Company tab list */}
-    <ul class="flex shrink-0 flex-row overflow-x-auto border-b border-lightest-navy md:flex-col md:border-b-0 md:border-l md:border-lightest-navy md:w-44">
+    <ul role="tablist" aria-label="Companies" class="flex shrink-0 flex-row overflow-x-auto border-b border-lightest-navy md:flex-col md:border-b-0 md:border-l md:border-lightest-navy md:w-44">
       {companies.map((company, i) => (
-        <li>
+        <li role="presentation">
           <button
             class:list={[
               'company-tab w-full px-5 py-3 text-left font-mono text-sm whitespace-nowrap md:whitespace-normal transition-all',
               i === 0 ? 'active' : '',
             ]}
+            role="tab"
+            id={`tab-${slug(company)}`}
+            aria-controls={`panel-${slug(company)}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
             data-company={company}
           >
             {tabLabel(company)}
@@ -60,6 +67,10 @@ const tabLabel = (name: string) => {
       {companies.map((company, i) => (
         <div
           class:list={['company-panel', i !== 0 ? 'hidden' : '']}
+          role="tabpanel"
+          id={`panel-${slug(company)}`}
+          aria-labelledby={`tab-${slug(company)}`}
+          tabindex="0"
           data-company={company}
         >
           <div class="space-y-10">
@@ -90,14 +101,30 @@ const tabLabel = (name: string) => {
   const tabs   = document.querySelectorAll<HTMLButtonElement>('.company-tab');
   const panels = document.querySelectorAll<HTMLElement>('.company-panel');
 
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.company;
-      tabs.forEach((t) => t.classList.remove('active'));
-      tab.classList.add('active');
-      panels.forEach((panel) => {
-        panel.classList.toggle('hidden', panel.dataset.company !== target);
-      });
+  function activate(tab: HTMLButtonElement) {
+    const target = tab.dataset.company;
+    tabs.forEach((t) => {
+      const selected = t === tab;
+      t.classList.toggle('active', selected);
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.classList.toggle('hidden', panel.dataset.company !== target);
+    });
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => activate(tab));
+    // Arrow keys move between tabs (the list is horizontal on mobile, vertical on desktop)
+    tab.addEventListener('keydown', (e) => {
+      const last = tabs.length - 1;
+      const next = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: last }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      const target = tabs[(next + tabs.length) % tabs.length];
+      target.focus();
+      activate(target);
     });
   });
 </script>
