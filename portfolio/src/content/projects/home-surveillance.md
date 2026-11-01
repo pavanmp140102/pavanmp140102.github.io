@@ -5,4 +5,5 @@ tech: "Raspberry Pi | ESP32 | Computer Vision | Python | IoT"
 github: "https://github.com/pavanmp140102/Home-Surveillance-System.git"
 image: "/assets/project-images/swarm-control-dashboard.svg"
 featured: false
+order: 3
 ---

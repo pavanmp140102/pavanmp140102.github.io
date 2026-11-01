@@ -5,4 +5,5 @@ tech: "MATLAB / Simulink | MBSE | SolidWorks | Python | Machine Learning"
 github: "https://github.com/ProjectHub-2023/Minor-Project-Repo.git"
 image: "/assets/project-images/delta_robot.png"
 featured: true
+order: 2
 ---

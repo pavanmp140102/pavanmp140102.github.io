@@ -89,9 +89,12 @@ tech: "ROS 2 | C++ | Python"
 github: "https://github.com/..."
 image: "/assets/project-images/your-image.png"
 featured: false        # set true to show in the alternating featured layout
+order: 5               # lower numbers appear first
 liveUrl: ""            # optional — link to a live demo
 ---
 ```
+
+Projects are sorted by `order` ascending (then by title).
 
 - `featured: false` → appears in the "Other Noteworthy Projects" card grid
 - `featured: true` → appears in the full alternating image/text featured layout above the grid

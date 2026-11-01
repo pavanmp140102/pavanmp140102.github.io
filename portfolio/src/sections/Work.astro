@@ -4,7 +4,10 @@ import SectionTitle from '../components/SectionTitle.astro';
 import IconFolder from '../components/IconFolder.astro';
 import IconGithub from '../components/IconGithub.astro';
 
-const allProjects = await getCollection('projects');
+// Sort explicitly; getCollection order follows the file system and isn't stable between builds
+const allProjects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
+);
 const featured  = allProjects.filter((p) => p.data.featured);
 const others    = allProjects.filter((p) => !p.data.featured);
 ---
