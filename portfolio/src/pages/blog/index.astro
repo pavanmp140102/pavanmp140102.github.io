@@ -24,11 +24,11 @@ const blogs = await getSortedBlogs();
                 <span class="font-mono text-xs text-slate">{getReadingTime(post.body)}</span>
                 <span class="font-mono text-xs text-slate">·</span>
                 <span class="font-mono text-xs text-slate">
-                  <span class="goatcounter-count" data-path={`/blog/${post.slug}`}></span> views
+                  <span class="goatcounter-count" data-path={`/blog/${post.id}`}></span> views
                 </span>
               </div>
               <h2 class="text-2xl font-semibold text-lightest-slate mb-2">
-                <a href={`/blog/${post.slug}`} class="transition hover:text-accent">
+                <a href={`/blog/${post.id}`} class="transition hover:text-accent">
                   {post.data.title}
                 </a>
               </h2>

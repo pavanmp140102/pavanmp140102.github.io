@@ -15,7 +15,7 @@ const blogs = await getSortedBlogs();
         <article class="group rounded bg-light-navy p-5 shadow-glow transition hover:-translate-y-1">
           <div class="flex items-start justify-between gap-4">
             <div class="flex-1">
-              <a href={`/blog/${post.slug}`} class="text-xl font-semibold text-lightest-slate hover:text-accent transition">
+              <a href={`/blog/${post.id}`} class="text-xl font-semibold text-lightest-slate hover:text-accent transition">
                 {post.data.title}
               </a>
               <time class="mt-1 block font-mono text-sm text-slate" datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
@@ -30,7 +30,7 @@ const blogs = await getSortedBlogs();
                 </div>
               )}
             </div>
-            <a href={`/blog/${post.slug}`} class="font-mono text-sm text-accent hover:underline whitespace-nowrap">
+            <a href={`/blog/${post.id}`} class="font-mono text-sm text-accent hover:underline whitespace-nowrap">
               Read →
             </a>
           </div>

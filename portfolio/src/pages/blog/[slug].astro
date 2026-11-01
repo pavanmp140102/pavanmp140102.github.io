@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { formatDate, getReadingTime } from '../../lib/blog';
@@ -7,7 +7,7 @@ import { formatDate, getReadingTime } from '../../lib/blog';
 export async function getStaticPaths() {
   const blogs = await getCollection('blogs');
   return blogs.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 const readingTime = getReadingTime(post.body);
 ---
@@ -55,6 +55,8 @@ const readingTime = getReadingTime(post.body);
 </Layout>
 
 <style is:global>
+  @reference "../../styles/global.css";
+
   .prose-content {
     --tw-prose-body: theme('colors.light-slate');
     --tw-prose-headings: theme('colors.lightest-slate');

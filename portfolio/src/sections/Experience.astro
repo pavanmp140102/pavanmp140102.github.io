@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
 
 const allExperiences = (await getCollection('experiences')).sort(
@@ -9,7 +9,7 @@ const allExperiences = (await getCollection('experiences')).sort(
 // Pre-render markdown bodies
 const rendered = await Promise.all(
   allExperiences.map(async (exp) => {
-    const { Content } = await exp.render();
+    const { Content } = await render(exp);
     return { exp, Content };
   })
 );
@@ -130,6 +130,8 @@ const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').re
 </script>
 
 <style>
+  @reference "../styles/global.css";
+
   .company-tab {
     @apply text-slate hover:text-accent hover:bg-light-navy/50;
     border-bottom: 2px solid transparent;
