@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
 import IconFolder from '../components/IconFolder.astro';
 import IconGithub from '../components/IconGithub.astro';
+import IconExternal from '../components/IconExternal.astro';
 
 // Sort explicitly; getCollection order follows the file system and isn't stable between builds
 const allProjects = (await getCollection('projects')).sort(
@@ -66,11 +67,7 @@ const others    = allProjects.filter((p) => !p.data.featured);
                 {project.data.liveUrl && (
                   <a href={project.data.liveUrl} target="_blank" rel="noreferrer"
                      class="hover:-translate-y-1 hover:text-accent transition-all" aria-label="Live">
-                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
+                    <IconExternal />
                   </a>
                 )}
               </div>
@@ -100,11 +97,7 @@ const others    = allProjects.filter((p) => !p.data.featured);
                 {project.data.liveUrl && (
                   <a href={project.data.liveUrl} target="_blank" rel="noreferrer"
                      class="hover:text-accent transition-colors" aria-label="Live">
-                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
+                    <IconExternal />
                   </a>
                 )}
               </div>
