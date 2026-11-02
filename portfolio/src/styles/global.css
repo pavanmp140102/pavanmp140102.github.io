@@ -13,10 +13,13 @@ body {
   @apply bg-navy text-light-slate font-sans;
 }
 
-a,
-button {
-  transition-property: color, background-color, border-color, opacity, transform, filter;
-  @apply duration-300;
+/* In the base layer so transition-* and duration-* utilities on an element still win */
+@layer base {
+  a,
+  button {
+    transition-property: color, background-color, border-color, opacity, transform, filter;
+    @apply duration-300;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

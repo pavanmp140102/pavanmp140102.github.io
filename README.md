@@ -90,7 +90,7 @@ github: "https://github.com/..."
 image: "/assets/project-images/your-image.png"
 featured: false        # set true to show in the alternating featured layout
 order: 5               # lower numbers appear first
-liveUrl: ""            # optional — link to a live demo
+# liveUrl: "https://example.com"   # optional — link to a live demo; omit if none
 ---
 ```
 

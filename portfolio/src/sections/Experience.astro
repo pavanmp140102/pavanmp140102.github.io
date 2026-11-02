@@ -32,7 +32,6 @@ const tabLabel = (name: string) => {
   return name;
 };
 
-const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
 <section id="experience" class="mx-auto max-w-5xl px-6 py-24">
@@ -50,8 +49,8 @@ const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').re
               i === 0 ? 'active' : '',
             ]}
             role="tab"
-            id={`tab-${slug(company)}`}
-            aria-controls={`panel-${slug(company)}`}
+            id={`tab-${i}`}
+            aria-controls={`panel-${i}`}
             aria-selected={i === 0 ? 'true' : 'false'}
             tabindex={i === 0 ? 0 : -1}
             data-company={company}
@@ -68,8 +67,8 @@ const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').re
         <div
           class:list={['company-panel', i !== 0 ? 'hidden' : '']}
           role="tabpanel"
-          id={`panel-${slug(company)}`}
-          aria-labelledby={`tab-${slug(company)}`}
+          id={`panel-${i}`}
+          aria-labelledby={`tab-${i}`}
           tabindex="0"
           data-company={company}
         >

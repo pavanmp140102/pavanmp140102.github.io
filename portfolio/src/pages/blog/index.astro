@@ -22,9 +22,10 @@ const blogs = await getSortedBlogs();
                 </time>
                 <span class="font-mono text-xs text-slate">·</span>
                 <span class="font-mono text-xs text-slate">{getReadingTime(post.body)}</span>
-                <span class="font-mono text-xs text-slate">·</span>
-                <span class="font-mono text-xs text-slate">
-                  <span class="goatcounter-count" data-path={`/blog/${post.id}`}></span> views
+                {/* Filled in by the script below; stays hidden if the count can't be loaded */}
+                <span class="view-count hidden items-center gap-3 font-mono text-xs text-slate" data-path={`/blog/${post.id}/`}>
+                  <span>·</span>
+                  <span><span class="view-count-n"></span> views</span>
                 </span>
               </div>
               <h2 class="text-2xl font-semibold text-lightest-slate mb-2">
@@ -48,3 +49,21 @@ const blogs = await getSortedBlogs();
       )}
     </main>
 </Layout>
+
+<script>
+  // GoatCounter's public counter endpoint; requires "allow using the visitor counter" in GoatCounter settings
+  const COUNTER = 'https://pavanmp1402.goatcounter.com/counter/';
+
+  document.querySelectorAll<HTMLElement>('.view-count').forEach(async (el) => {
+    try {
+      const res = await fetch(`${COUNTER}${encodeURIComponent(el.dataset.path ?? '')}.json`);
+      if (!res.ok) return;
+      const { count } = await res.json();
+      if (!count) return;
+      el.querySelector('.view-count-n')!.textContent = count;
+      el.classList.replace('hidden', 'flex');
+    } catch {
+      // Network or CORS failure: leave the count hidden
+    }
+  });
+</script>
