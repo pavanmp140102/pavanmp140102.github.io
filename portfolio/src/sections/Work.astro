@@ -3,8 +3,12 @@ import { getCollection } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
 import IconFolder from '../components/IconFolder.astro';
 import IconGithub from '../components/IconGithub.astro';
+import IconExternal from '../components/IconExternal.astro';
 
-const allProjects = await getCollection('projects');
+// Sort explicitly; getCollection order follows the file system and isn't stable between builds
+const allProjects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
+);
 const featured  = allProjects.filter((p) => p.data.featured);
 const others    = allProjects.filter((p) => !p.data.featured);
 ---
@@ -63,11 +67,7 @@ const others    = allProjects.filter((p) => !p.data.featured);
                 {project.data.liveUrl && (
                   <a href={project.data.liveUrl} target="_blank" rel="noreferrer"
                      class="hover:-translate-y-1 hover:text-accent transition-all" aria-label="Live">
-                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
+                    <IconExternal />
                   </a>
                 )}
               </div>
@@ -83,7 +83,7 @@ const others    = allProjects.filter((p) => !p.data.featured);
   {others.length > 0 && (
     <div>
       <h3 class="mb-2 text-center text-2xl font-bold text-lightest-slate">Other Noteworthy Projects</h3>
-      <p class="mb-10 text-center font-mono text-sm text-accent">view the archive</p>
+      <p class="mb-10 text-center font-mono text-sm"><a href="https://github.com/pavanmp140102?tab=repositories" target="_blank" rel="noreferrer" class="text-accent hover:underline">view the archive</a></p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {others.map((project) => (
           <article class="group flex flex-col rounded bg-light-navy p-7 shadow-glow transition duration-300 hover:-translate-y-2 hover:shadow-xl">
@@ -97,11 +97,7 @@ const others    = allProjects.filter((p) => !p.data.featured);
                 {project.data.liveUrl && (
                   <a href={project.data.liveUrl} target="_blank" rel="noreferrer"
                      class="hover:text-accent transition-colors" aria-label="Live">
-                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
+                    <IconExternal />
                   </a>
                 )}
               </div>

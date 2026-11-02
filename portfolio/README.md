@@ -5,7 +5,7 @@ A modern, maintainable portfolio built with **Astro** and **Tailwind CSS**, feat
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
+- Node.js 22.23.4+ and npm (CI builds with Node 24, see `.nvmrc`)
 
 ### Installation & Development
 
@@ -13,7 +13,7 @@ A modern, maintainable portfolio built with **Astro** and **Tailwind CSS**, feat
 # Install dependencies
 npm install
 
-# Start development server (runs on http://localhost:3000)
+# Start development server (runs on http://localhost:4321)
 npm run dev
 ```
 
@@ -69,6 +69,7 @@ Create a new file in `src/content/experiences/` (e.g., `my-internship.md`):
 role: "Software Engineer Intern"
 company: "Tech Company"
 duration: "Jan 2024 – Jun 2024"
+startDate: "2024-01-01"                            # used for sorting, newest first
 description: "Brief description of your role and accomplishments."
 ---
 ```
@@ -92,6 +93,7 @@ description: "Detailed description of the project and its impact."
 tech: "ROS2 | Python | LiDAR"
 github: "https://github.com/yourusername/repo-name"
 featured: true                                      # false = card grid, no image needed
+order: 1                                            # lower numbers appear first
 image: "/assets/project-images/robot.png"           # only required when featured: true
 # liveUrl: "https://example.com"                    # optional for both types
 ---
@@ -134,7 +136,7 @@ More content...
 
 - **About section & skills:** Edit `src/sections/About.astro`
 - **Hero headline/CTA:** Edit `src/sections/Hero.astro`
-- **Contact info:** Edit `src/sections/Contact.astro`
+- **Contact email:** Edit `src/lib/site.ts`
 
 ### Updating Resume Link
 
@@ -145,24 +147,25 @@ In `src/components/Navbar.astro`, find the resume button and update:
 
 ### Updating Personal Info
 
-Check `src/components/Navbar.astro`, `src/sections/Hero.astro`, and `src/sections/Contact.astro` for personal details to update.
+Check `src/lib/site.ts`, `src/components/Navbar.astro`, `src/components/SocialSidebar.astro` and `src/sections/Hero.astro` for personal details to update.
 
 ### Theme & Styling
 
-- **Colors & spacing:** Edit `src/styles/global.css` (CSS variables at the top)
-- **Tailwind config:** Customize in `tailwind.config.mjs`
+- **Colors & fonts:** Edit the theme in `tailwind.config.mjs`
+- **Global styles:** `src/styles/global.css`
+- **Page `<head>` (title, meta, analytics):** `src/layouts/Layout.astro`
 - **All sections:** Use Tailwind classes in `.astro` files
 
 ## 🚀 Deployment
 
 ### GitHub Pages
 
-A GitHub Actions workflow is included (`.github/workflows/deploy-portfolio.yml`) to automatically deploy to GitHub Pages on every push.
+A GitHub Actions workflow is included (`.github/workflows/deploy-portfolio.yml`) to automatically deploy to GitHub Pages on every push to `main`.
 
 **Setup:**
 1. Push code to GitHub
-2. Workflow automatically builds and deploys to `gh-pages` branch
-3. Portfolio appears at `https://yourusername.github.io/Webpage`
+2. The workflow builds `portfolio/` and deploys it with GitHub Pages Actions (no `gh-pages` branch)
+3. Portfolio appears at `https://pavanmp140102.github.io`
 
 **Manual deployment:**
 ```bash

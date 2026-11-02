@@ -20,7 +20,7 @@ const resumeUrl = 'https://drive.google.com/file/d/1OPF5zC-sCm9-UFFYBOq7DJSf-xrY
     </a>
 
     {/* Hamburger (mobile only) */}
-    <button id="menu-toggle" class="relative z-40 flex flex-col gap-1.5 md:hidden" aria-label="Toggle menu">
+    <button id="menu-toggle" class="relative z-40 flex flex-col gap-1.5 md:hidden" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
       <span id="line1" class="h-0.5 w-6 bg-accent transition-all duration-300 origin-center"></span>
       <span id="line2" class="h-0.5 w-6 bg-accent transition-all duration-300"></span>
       <span id="line3" class="h-0.5 w-6 bg-accent transition-all duration-300 origin-center"></span>
@@ -81,7 +81,14 @@ const resumeUrl = 'https://drive.google.com/file/d/1OPF5zC-sCm9-UFFYBOq7DJSf-xrY
   const line2     = document.getElementById('line2');
   const line3     = document.getElementById('line3');
 
+  // Track state explicitly: the 'hidden' class lags 250 ms behind during the close animation
+  let isOpen = false;
+  let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
   function openMenu() {
+    isOpen = true;
+    clearTimeout(hideTimer);
+    menuToggle?.setAttribute('aria-expanded', 'true');
     navMenu?.classList.remove('hidden');
     navMenu?.classList.add('flex');
     navMenu!.style.animation = 'slideDown 0.25s ease-out forwards';
@@ -91,22 +98,32 @@ const resumeUrl = 'https://drive.google.com/file/d/1OPF5zC-sCm9-UFFYBOq7DJSf-xrY
   }
 
   function closeMenu() {
+    if (!isOpen) return;
+    isOpen = false;
+    menuToggle?.setAttribute('aria-expanded', 'false');
     navMenu!.style.animation = 'slideUp 0.25s ease-out forwards';
     line1!.style.transform   = 'rotate(0)';
     line2!.style.opacity     = '1';
     line3!.style.transform   = 'rotate(0)';
-    setTimeout(() => {
+    hideTimer = setTimeout(() => {
       navMenu?.classList.add('hidden');
       navMenu?.classList.remove('flex');
     }, 250);
   }
 
   menuToggle?.addEventListener('click', () => {
-    navMenu?.classList.contains('hidden') ? openMenu() : closeMenu();
+    isOpen ? closeMenu() : openMenu();
   });
 
   navMenu?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      closeMenu();
+      menuToggle?.focus();
+    }
   });
 </script>
 

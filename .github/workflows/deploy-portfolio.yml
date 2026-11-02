@@ -3,6 +3,8 @@ name: Deploy Astro Portfolio to GitHub Pages
 on:
   push:
     branches: ['main']
+  pull_request:
+    branches: ['main']
   workflow_dispatch:
 
 permissions:
@@ -10,9 +12,11 @@ permissions:
   pages: write
   id-token: write
 
+# Deploys share one group so they never overlap; each PR gets its own group so
+# PR builds can't displace a queued deploy, and newer PR pushes cancel older ones
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -26,7 +30,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: portfolio/.nvmrc
           cache: npm
           cache-dependency-path: portfolio/package-lock.json
       - name: Install dependencies
@@ -34,11 +38,14 @@ jobs:
       - name: Build with Astro
         run: npm run build
       - name: Upload Pages Artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: portfolio/dist
 
   deploy:
+    # Pull requests only build; deploys happen on main
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

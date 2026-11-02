@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config '../../tailwind.config.mjs';
 
 :root {
   color-scheme: dark;
@@ -11,14 +10,28 @@ html {
 }
 
 body {
-  @apply m-0 bg-navy text-light-slate font-sans;
+  @apply bg-navy text-light-slate font-sans;
 }
 
-* {
-  @apply box-border;
+/* In the base layer so transition-* and duration-* utilities on an element still win */
+@layer base {
+  a,
+  button {
+    transition-property: color, background-color, border-color, opacity, transform, filter;
+    @apply duration-300;
+  }
 }
 
-a,
-button {
-  @apply transition-all duration-300;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

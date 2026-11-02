@@ -5,4 +5,5 @@ tech: "Autodesk Inventor | Arduino | C++ | IR Sensors"
 github: "https://github.com/pavanmp140102/Automatic-Stamping-Machine.git"
 image: "/assets/project-images/swarm-control-dashboard.svg"
 featured: false
+order: 6
 ---

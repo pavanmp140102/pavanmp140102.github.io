@@ -1,38 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
-import '../../styles/global.css';
-import Navbar from '../../components/Navbar.astro';
-import Footer from '../../components/Footer.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getSortedBlogs, formatDate, getReadingTime } from '../../lib/blog';
 
-const blogs = (await getCollection('blogs')).sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
-
-function getReadingTime(body: string): string {
-  const words = body.trim().split(/\s+/).length;
-  const minutes = Math.ceil(words / 200);
-  return `${minutes} min read`;
-}
+const blogs = await getSortedBlogs();
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog | Pavan Patil</title>
-    <meta name="description" content="Writing on robotics, autonomous systems, ROS2, and field engineering." />
-    <link rel="icon" type="image/png" href="/assets/logo.png" />
-    <meta property="og:title" content="Blog | Pavan Patil" />
-    <meta property="og:description" content="Writing on robotics, autonomous systems, ROS2, and field engineering." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://pavanmp140102.github.io/blog" />
-    <script data-goatcounter="https://pavanmp1402.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  </head>
-  <body>
-    <Navbar />
-
-    <main class="mx-auto min-h-screen max-w-5xl px-6 py-20">
+<Layout title="Blog | Pavan Patil" description="Writing on robotics, autonomous systems, ROS2, and field engineering.">
+    <main id="main" class="mx-auto min-h-screen max-w-5xl px-6 py-20">
       <h1 class="text-4xl font-bold text-lightest-slate md:text-5xl">Blog</h1>
       <p class="mt-2 mb-12 text-slate">Thoughts, tutorials, and projects</p>
 
@@ -43,22 +17,19 @@ function getReadingTime(body: string): string {
           {blogs.map((post) => (
             <article class="border-l-4 border-accent pl-6 py-4 transition hover:bg-light-navy/50">
               <div class="flex flex-wrap items-center gap-3 mb-1">
-                <time class="font-mono text-xs text-accent">
-                  {new Date(post.data.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                <time class="font-mono text-xs text-accent" datetime={post.data.date.toISOString()}>
+                  {formatDate(post.data.date)}
                 </time>
                 <span class="font-mono text-xs text-slate">·</span>
                 <span class="font-mono text-xs text-slate">{getReadingTime(post.body)}</span>
-                <span class="font-mono text-xs text-slate">·</span>
-                <span class="font-mono text-xs text-slate">
-                  <span class="goatcounter-count" data-path={`/blog/${post.slug}`}></span> views
+                {/* Filled in by the script below; stays hidden if the count can't be loaded */}
+                <span class="view-count hidden items-center gap-3 font-mono text-xs text-slate" data-path={`/blog/${post.id}/`}>
+                  <span>·</span>
+                  <span><span class="view-count-n"></span> views</span>
                 </span>
               </div>
               <h2 class="text-2xl font-semibold text-lightest-slate mb-2">
-                <a href={`/blog/${post.slug}`} class="transition hover:text-accent">
+                <a href={`/blog/${post.id}`} class="transition hover:text-accent">
                   {post.data.title}
                 </a>
               </h2>
@@ -77,7 +48,22 @@ function getReadingTime(body: string): string {
         </div>
       )}
     </main>
+</Layout>
 
-    <Footer />
-  </body>
-</html>
+<script>
+  // GoatCounter's public counter endpoint; requires "allow using the visitor counter" in GoatCounter settings
+  const COUNTER = 'https://pavanmp1402.goatcounter.com/counter/';
+
+  document.querySelectorAll<HTMLElement>('.view-count').forEach(async (el) => {
+    try {
+      const res = await fetch(`${COUNTER}${encodeURIComponent(el.dataset.path ?? '')}.json`);
+      if (!res.ok) return;
+      const { count } = await res.json();
+      if (!count) return;
+      el.querySelector('.view-count-n')!.textContent = count;
+      el.classList.replace('hidden', 'flex');
+    } catch {
+      // Network or CORS failure: leave the count hidden
+    }
+  });
+</script>

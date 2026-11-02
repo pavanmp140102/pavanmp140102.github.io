@@ -16,8 +16,8 @@ export default {
         accent: '#64ffda',
       },
       fontFamily: {
-        mono: ['"SF Mono"', '"Fira Code"', '"Fira Mono"', '"Roboto Mono"', 'monospace'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"SF Mono"', '"Fira Code Variable"', '"Fira Code"', '"Fira Mono"', '"Roboto Mono"', 'monospace'],
+        sans: ['"Inter Variable"', 'Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         glow: '0 10px 30px -15px rgba(2, 12, 27, 0.7)',

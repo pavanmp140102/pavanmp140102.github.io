@@ -60,7 +60,7 @@ Limitations:
 
 The most important thing to understand about IMUs for localization: **you cannot reliably integrate acceleration into position**. The bias causes the estimated velocity to grow over time, and integrated twice into position, the error becomes enormous within seconds.
 
-Here is what happens when you naively double-integrate raw accelerometer data for a robot that is completely stationary:
+Here is roughly what happens when you naively double-integrate raw accelerometer data for a robot that is completely stationary. The exact numbers are illustrative — they depend entirely on the IMU and its bias — but the shape of the curve is always the same, because error grows with the square of time:
 
 ```
 t=0s    position error: ~0 m
@@ -97,36 +97,126 @@ I won't go deep into the matrix math here — there are better resources for tha
 
 ## 5. ROS2 Architecture
 
-Here is the system I ended up building:
+My first version used a single EKF that fused the IMU and GNSS and published `odom → base_link`. That is a common mistake, and the `robot_localization` documentation explains why: the `odom` frame is supposed to be **continuous** — it can drift, but it must never jump — while GNSS corrections arrive as discrete jumps. Fusing GNSS into the `odom` filter makes the robot's local pose teleport every time a fix lands.
+
+The recommended layout uses **two EKF instances** plus `navsat_transform_node`:
 
 ```
-[IMU]                [GNSS]
-  |                    |
-  | /imu/data          | /fix (NavSatFix)
-  |                    |
-  v                    v
-[robot_localization]  [navsat_transform_node]
-  ekf_node               |
-  ^                      | /odometry/gps
-  |______________________|
-            |
-            v
-    /odometry/filtered
-            |
-            v
-      [TF: odom → base_link]
+[IMU] ── /imu/data ──┬─────────────► [ekf_local]  ──► TF odom → base_link
+                     │                (world_frame: odom)
+                     │
+                     ├─────────────► [ekf_global] ──► TF map → odom
+                     │                (world_frame: map)
+                     │                   ▲        │
+                     │   /odometry/gps   │        │ /odometry/filtered/global
+                     │                   │        ▼
+                     └─────────────► [navsat_transform_node] ◄── /fix ── [GNSS]
 ```
 
-Two nodes from the `robot_localization` package do the work:
+**`ekf_local`** (world frame `odom`)
+Fuses only continuous sources and publishes `odom → base_link`. It gives a smooth local estimate that drifts over time.
 
-**`ekf_node`**
-The EKF filter itself. It takes IMU data and the GPS-derived odometry, fuses them, and publishes `/odometry/filtered` — a smoothed pose estimate in the `odom` frame. It also broadcasts the `odom → base_link` TF transform.
+**`ekf_global`** (world frame `map`)
+Fuses the same continuous sources *plus* the GNSS-derived odometry, and publishes `map → odom`. When a GNSS correction arrives, it is this transform that absorbs the jump, so `odom → base_link` stays smooth.
 
 **`navsat_transform_node`**
-A helper that converts raw GNSS fixes (latitude/longitude/altitude from `/fix`) into odometry messages in the robot's local frame. It handles the datum (the reference origin point), the projection from spherical to Cartesian coordinates, and the heading offset between GNSS and the robot's body frame. Its output feeds into `ekf_node`.
+Converts raw GNSS fixes (latitude/longitude/altitude from `/fix`) into odometry in the robot's world frame. It handles the datum (the reference origin), the projection from spherical to Cartesian coordinates, and the heading offset between the IMU's idea of north and the robot's frame. Note the loop: it needs the IMU for heading *and* `ekf_global`'s output to know where the robot is, and its output feeds back into `ekf_global`.
 
-The reason this two-node split exists: the EKF works in a local Cartesian frame (meters), not in GPS coordinates (degrees). `navsat_transform_node` does that conversion so the EKF doesn't have to care about geodesy.
+The reason this split exists: the EKF works in a local Cartesian frame (meters), not in GPS coordinates (degrees). `navsat_transform_node` does that conversion so the filter doesn't have to care about geodesy.
+
+There is an uncomfortable consequence hiding in this diagram. With only an IMU and GNSS, **`ekf_local` has no source of velocity or position at all** — just orientation and acceleration. Keep that in mind; it turns out to be the answer to the question this post started with.
 
 ---
 
-*This post covers sections 1–5. The next section will document the actual hardware setup, initial configuration, and what the first trajectory looked like — including what went wrong.*
+## 6. Hardware Setup
+
+<!-- TODO: receiver and IMU models, platform, and whether RTK was available -->
+
+The setup was deliberately minimal: a low-cost GNSS receiver and a 9-axis IMU, both publishing straight into ROS 2.
+
+Two details mattered more than the hardware itself:
+
+- **The IMU's frame.** `robot_localization` expects data that follows REP-103 (x forward, y left, z up) with yaw measured counter-clockwise from east (ENU). Many IMU drivers publish in NED or with yaw from north, and the filter will happily fuse a heading that is off by 90° or mirrored.
+- **The antenna position.** The GNSS antenna is not at the robot's center. A static transform from `base_link` to the antenna's frame lets `navsat_transform_node` correct for the offset; without it, the position estimate swings whenever the robot turns.
+
+---
+
+## 7. Configuration
+
+These are the parameters that made the biggest difference. Everything else stayed close to the package defaults.
+
+```yaml
+ekf_global:
+  ros__parameters:
+    two_d_mode: true           # ground robot: ignore z, roll, pitch
+    world_frame: map
+    imu0: /imu/data
+    #            x     y     z     roll  pitch yaw
+    #            vx    vy    vz    vroll vpitch vyaw
+    #            ax    ay    az
+    imu0_config: [false, false, false, false, false, true,
+                  false, false, false, false, false, true,
+                  true,  false, false]
+    imu0_remove_gravitational_acceleration: true
+    odom0: /odometry/gps
+    odom0_config: [true,  true,  false, false, false, false,
+                   false, false, false, false, false, false,
+                   false, false, false]
+
+navsat_transform:
+  ros__parameters:
+    magnetic_declination_radians: 0.0   # set for your location
+    yaw_offset: 0.0                     # if the IMU reads 0 at magnetic north, use pi/2
+    zero_altitude: true
+    publish_filtered_gps: true
+```
+
+The rule of thumb that saved me the most time: **fuse each quantity from exactly one source**. From the GNSS, fuse only `x` and `y`. From the IMU, fuse yaw, yaw rate, and forward acceleration — never position.
+
+<!-- TODO: paste the actual config used, if it differs -->
+
+---
+
+## 8. First Results
+
+Standing still, raw GNSS wandered by up to about **0.45 m** — consistent with what you would expect from a non-RTK receiver in open sky.
+
+After fusion, the global estimate was noticeably smoother: the filter averaged out much of the fix-to-fix jitter instead of chasing every update.
+
+<!-- TODO: filtered position spread when stationary, and a plot of raw GNSS vs filtered trajectory while driving -->
+
+Driving was a different story. The global position stayed anchored, but the local estimate (`odom → base_link`) was not useful on its own, and the heading needed work before the global track lined up with reality.
+
+---
+
+## 9. What Went Wrong
+
+<!-- TODO: confirm which of these actually happened and in what order; add anything missing -->
+
+**The trajectory was rotated.** The fused path had the right shape but was turned relative to the real one. The cause was heading: magnetic declination and `yaw_offset` in `navsat_transform_node`. If the IMU reports 0 at magnetic north, ENU expects 0 at east, so the offset is π/2 — plus the declination for your location.
+
+**The filter trusted GNSS too much.** If the receiver driver reports unrealistically small covariances in `NavSatFix`, the EKF treats every noisy fix as truth and the estimate jumps with it. Checking the published covariance — and inflating it when needed — fixed most of the jitter.
+
+**The local frame drifted away.** This is the consequence from section 5. With nothing measuring velocity, `ekf_local` can only integrate acceleration, which is exactly what section 3 showed you must not do.
+
+---
+
+## 10. So, Can IMU + GNSS Give Stable Odometry?
+
+The honest answer is **half yes**.
+
+- **Global position: yes.** Fused with an IMU, GNSS gives a bounded global position. Its error stays near the receiver's noise level — sub-meter here — and never drifts away.
+- **Smooth local odometry: no.** Neither sensor measures how far the robot actually moved between updates. The IMU's accelerometer is too biased to integrate, and GNSS is too noisy and slow to differentiate. Without a velocity source, there is nothing for the `odom` frame to stand on.
+
+That missing piece is what wheel encoders (or visual or LiDAR odometry) provide. With a velocity source in `ekf_local`, the two-filter design finally works as intended: smooth locally, anchored globally.
+
+---
+
+## 11. Takeaways
+
+- Use two EKFs: continuous sources in `odom`, GNSS in `map`. Never fuse GNSS into the frame that publishes `odom → base_link`.
+- Fix the IMU's frame convention before touching anything else. A wrong yaw convention looks like every other bug.
+- Fuse each quantity from one source, and check the covariances your drivers actually publish.
+- IMU + GNSS gives you a good global position, not good odometry. Add a velocity source for that.
+
+The next step is adding wheel odometry and seeing how much the local estimate improves.

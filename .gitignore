@@ -3,8 +3,10 @@
 node_modules
 yarn-error.log
 
-# Build directory
-/public
+# Astro build output and generated types (CI rebuilds these)
+portfolio/dist/
+portfolio/.astro/
+
 .DS_Store
 
 .vscode/
